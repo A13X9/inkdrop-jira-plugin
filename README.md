@@ -1,4 +1,4 @@
-# inkdrop-copy-as-jira
+# copy-as-jira
 
 Right-click an Inkdrop note and copy its body as Jira wiki markup.
 
@@ -25,7 +25,7 @@ Headings deeper than h3 are demoted to h3 for readability.
 ## Install
 
 ```bash
-ipm install inkdrop-copy-as-jira
+ipm install copy-as-jira
 ```
 
 ## Usage

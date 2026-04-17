@@ -1,5 +1,5 @@
 {
-  "name": "inkdrop-copy-as-jira",
+  "name": "copy-as-jira",
   "version": "1.0.0",
   "description": "Right-click an Inkdrop note and copy its body as Jira wiki markup.",
   "main": "./lib/index",
