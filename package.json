@@ -1,0 +1,38 @@
+{
+  "name": "inkdrop-copy-as-jira",
+  "version": "1.0.0",
+  "description": "Right-click an Inkdrop note and copy its body as Jira wiki markup.",
+  "main": "./lib/index",
+  "files": [
+    "lib",
+    "menus"
+  ],
+  "keywords": [
+    "inkdrop",
+    "jira",
+    "clipboard",
+    "copy",
+    "markdown"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A13X9/inkdrop-jira-plugin.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "inkdrop": ">=5.6.0 <7"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepack": "npm run build",
+    "watch": "tsc --watch",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "@types/jest": "^29.5.0"
+  }
+}

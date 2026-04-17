@@ -1,0 +1,7 @@
+node_modules/
+lib/
+.codex
+.mempalace/
+entities.json
+mempalace.yaml
+*.tgz

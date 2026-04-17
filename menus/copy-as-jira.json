@@ -1,0 +1,21 @@
+{
+  "menu": [
+    {
+      "label": "Plugins",
+      "submenu": [
+        {
+          "label": "Copy body as Jira",
+          "command": "copy-as-jira:copy"
+        }
+      ]
+    }
+  ],
+  "context-menu": {
+    ".note-list-item-view": [
+      {
+        "label": "Copy body as Jira",
+        "command": "copy-as-jira:copy"
+      }
+    ]
+  }
+}
