@@ -131,4 +131,82 @@ describe("markdownToJira", () => {
       expect(markdownToJira(input)).toBe(expected);
     });
   });
+
+  describe("code block protection", () => {
+    it("should not convert # comments inside code blocks to headings", () => {
+      const input = [
+        "```bash",
+        "# Start local PostgreSQL",
+        "docker compose up -d",
+        "",
+        "# Run tests",
+        "npx vitest run",
+        "```",
+      ].join("\n");
+
+      const expected = [
+        "{code:bash}",
+        "# Start local PostgreSQL",
+        "docker compose up -d",
+        "",
+        "# Run tests",
+        "npx vitest run",
+        "{code}",
+      ].join("\n");
+
+      expect(markdownToJira(input)).toBe(expected);
+    });
+
+    it("should not convert markdown syntax inside code blocks", () => {
+      const input = [
+        "```md",
+        "## Heading",
+        "**bold** and *italic*",
+        "- list item",
+        "[link](http://example.com)",
+        "```",
+      ].join("\n");
+
+      const expected = [
+        "{code:md}",
+        "## Heading",
+        "**bold** and *italic*",
+        "- list item",
+        "[link](http://example.com)",
+        "{code}",
+      ].join("\n");
+
+      expect(markdownToJira(input)).toBe(expected);
+    });
+
+    it("should handle multiple code blocks with headings between them", () => {
+      const input = [
+        "## Setup",
+        "",
+        "```bash",
+        "# install deps",
+        "npm install",
+        "```",
+        "",
+        "## Run",
+        "",
+        "```bash",
+        "# start server",
+        "npm start",
+        "```",
+      ].join("\n");
+
+      const result = markdownToJira(input);
+
+      // Headings outside code blocks are converted
+      expect(result).toContain("h2. Setup");
+      expect(result).toContain("h2. Run");
+
+      // Comments inside code blocks are NOT converted
+      expect(result).toContain("# install deps");
+      expect(result).toContain("# start server");
+      expect(result).not.toContain("h1. install deps");
+      expect(result).not.toContain("h1. start server");
+    });
+  });
 });

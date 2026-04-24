@@ -25,16 +25,23 @@ export function trimText(text: string): string {
 export function markdownToJira(markdown: string): string {
   let result = markdown;
 
-  // --- Block-level transforms (process line-by-line for some) ---
-
-  // Convert fenced code blocks: ```lang\n...\n``` → {code:lang}\n...\n{code}
+  // --- Protect code blocks from all subsequent transforms ---
+  // Extract fenced code blocks into placeholders, convert to Jira {code} format,
+  // and restore them at the very end so their content is never touched.
+  const codeBlocks: string[] = [];
+  const CODE_PLACEHOLDER = "\x03CODE_BLOCK_";
   result = result.replace(
     /^```(\w+)?\s*\n([\s\S]*?)^```\s*$/gm,
     (_match, lang: string | undefined, code: string) => {
       const langAttr = lang ? `:${lang}` : "";
-      return `{code${langAttr}}\n${code}{code}`;
+      const jiraBlock = `{code${langAttr}}\n${code}{code}`;
+      const index = codeBlocks.length;
+      codeBlocks.push(jiraBlock);
+      return `${CODE_PLACEHOLDER}${index}\x03`;
     },
   );
+
+  // --- Block-level transforms (process line-by-line for some) ---
 
   // Convert headings: # H1 → h1. H1
   result = result.replace(/^#{1,6}\s+(.+)$/gm, (_match, text: string) => {
@@ -143,6 +150,11 @@ export function markdownToJira(markdown: string): string {
     i++;
   }
   result = tableResult.join("\n");
+
+  // --- Restore protected code blocks ---
+  for (let idx = 0; idx < codeBlocks.length; idx++) {
+    result = result.replace(`${CODE_PLACEHOLDER}${idx}\x03`, codeBlocks[idx]);
+  }
 
   return result;
 }
